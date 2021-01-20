@@ -14,9 +14,6 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
   },
   gridContainer: {
-    width: '100%',
-    paddingLeft: theme.spacing(50),
-    paddingRight: theme.spacing(50),
     paddingBottom: theme.spacing(2),
   },
   buttonGenerate: {
@@ -43,7 +40,7 @@ function App() {
     if (consCount >= 0 && varCount > 0) {
       let newMatrix = Array.from(Array(consCount + 1), () => new Array(varCount));
       newMatrix.forEach((row, row_index) => {
-        if (matrix[row_index]){
+        if (matrix[row_index]) {
           newMatrix[row_index] = matrix[row_index]
         }
       })
@@ -52,7 +49,7 @@ function App() {
       let newB = Array.from(Array(consCount));
       setB(newB);
     }
-  // eslint-disable-next-line
+    // eslint-disable-next-line
   }, [varCount, consCount]);
 
   const alterMatrix = (row, col, value) => {
@@ -83,15 +80,15 @@ function App() {
         </Toolbar>
       </AppBar>
       <br /><br />
-      <Grid container spacing={0} className={classes.gridContainer}>
-        <Grid item xs={6}>
+      <Grid container className={classes.gridContainer} justify="space-evenly" alignItems="center"  >
+        <Grid item>
           <TextField
             value={varCount}
             onChange={e => setVarCount(e.target.value === '' ? '' : parseInt(e.target.value))}
             type='number'
             label='Total Variables' />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item>
           <TextField
             value={consCount}
             onChange={e => setConsCount(e.target.value === '' ? '' : parseInt(e.target.value))}
@@ -159,8 +156,6 @@ function App() {
                   }
                   <TableCell align='center'>
                     <Select
-                      // value={type}
-                      // onChange={e => setType(e.target.value)}
                       defaultValue='-1'>
                       <MenuItem value='-1'><FaLessThanEqual /></MenuItem>
                       <MenuItem value='0'><FaEquals /></MenuItem>
@@ -168,10 +163,10 @@ function App() {
                     </Select>
                   </TableCell>
                   <TableCell align='center'>
-                    <TextField 
-                    value={b[j] || ''}
-                    onChange={e => alterB(j, e.target.value)}
-                    type='number' />
+                    <TextField
+                      value={b[j] || ''}
+                      onChange={e => alterB(j, e.target.value)}
+                      type='number' />
                   </TableCell>
                 </TableRow>
               )
