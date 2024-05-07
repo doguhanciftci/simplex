@@ -1,30 +1,11 @@
-import {
-    AppBar,
-    Button,
-    Card,
-    CardActions,
-    CardContent,
-    CardHeader,
-    Divider,
-    Grid,
-    IconButton,
-    InputAdornment,
-    MenuItem,
-    Paper,
-    Select,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    TextField,
-    Toolbar,
-    Typography,
-} from '@mui/material';
+import { Card, CardActions, CardContent, CardHeader, Divider, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import * as math from 'mathjs';
 import React, { useEffect, useState } from 'react';
-import { FaCalculator, FaEquals, FaGreaterThanEqual, FaLessThanEqual, FaPlayCircle, FaPlus } from 'react-icons/fa';
+import ActionButtons from './components/ActionButtons';
+import AppBar from './components/AppBar';
+import GeneralConfiguration from './components/GeneralConfiguration';
+import SubjectEquations from './components/SubjectEquations';
+import TargetEquation from './components/TargetEquation';
 
 function App() {
     const [varCount, setVarCount] = useState(2);
@@ -270,178 +251,41 @@ function App() {
                 width: '100%',
             }}
         >
-            <AppBar position="static">
-                <Toolbar>
-                    <IconButton
-                        edge="start"
-                        style={{
-                            marginRight: '16px',
-                        }}
-                        color="inherit"
-                        aria-label="menu"
-                    >
-                        <FaCalculator />
-                    </IconButton>
-                    <Typography variant="h6">Revised Simplex Calculator</Typography>
-                </Toolbar>
-            </AppBar>
+            <AppBar />
             <br />
             <br />
-            <Grid
-                container
-                style={{ paddingBottom: '16px' }}
-                direction="row"
-                justifyContent="space-evenly"
-                alignItems="center"
-            >
-                <Grid item>
-                    <TextField
-                        value={varCount}
-                        onChange={(e) => setVarCount(e.target.value === '' ? '' : parseInt(e.target.value))}
-                        type="number"
-                        label="Total Variables"
-                    />
-                </Grid>
-                <Grid item>
-                    <TextField
-                        value={consCount}
-                        onChange={(e) => setConsCount(e.target.value === '' ? '' : parseInt(e.target.value))}
-                        type="number"
-                        label="Total Contraints"
-                    />
-                </Grid>
-            </Grid>
+            <GeneralConfiguration
+                varCount={varCount}
+                setVarCount={setVarCount}
+                consCount={consCount}
+                setConsCount={setConsCount}
+            />
             <Divider />
             <TableContainer component={Paper}>
                 <Table aria-label="simple table">
                     <TableHead>
-                        <TableRow>
-                            <TableCell align="center">
-                                <Select
-                                    value={type}
-                                    onChange={(e) => setType(e.target.value)}
-                                >
-                                    <MenuItem value="Max">Max Z</MenuItem>
-                                    <MenuItem value="Min">Min Z</MenuItem>
-                                </Select>
-                            </TableCell>
-                            <TableCell align="center">
-                                <FaEquals />
-                            </TableCell>
-                            {/* <TableCell align='center'><FaEquals /></TableCell> */}
-                            {varCount > 0 &&
-                                Array.from(Array(varCount)).map((v, i) => (
-                                    <>
-                                        <TableCell
-                                            key={i}
-                                            align="center"
-                                        >
-                                            <TextField
-                                                type="number"
-                                                value={c[i] || ''}
-                                                onChange={(e) => alterC(i, e.target.value)}
-                                                InputProps={{
-                                                    endAdornment: (
-                                                        <InputAdornment position="end">
-                                                            X<sub>{i + 1}</sub>
-                                                        </InputAdornment>
-                                                    ),
-                                                }}
-                                            />
-                                        </TableCell>
-                                        {i < varCount - 1 && (
-                                            <TableCell align="center">
-                                                <FaPlus />
-                                            </TableCell>
-                                        )}
-                                    </>
-                                ))}
-                        </TableRow>
+                        <TargetEquation
+                            type={type}
+                            setType={setType}
+                            varCount={varCount}
+                            c={c}
+                            alterC={alterC}
+                        />
                     </TableHead>
                     <TableBody>
-                        <TableRow key={-1}>
-                            <TableCell>Subject to constraints</TableCell>
-                        </TableRow>
-                        {consCount > 0 &&
-                            Array.from(Array(consCount)).map((v, j) => (
-                                <TableRow
-                                    key={j}
-                                    align="center"
-                                >
-                                    {varCount > 0 &&
-                                        Array.from(Array(varCount)).map((v, i) => (
-                                            <>
-                                                <TableCell
-                                                    key={i}
-                                                    align="center"
-                                                >
-                                                    <TextField
-                                                        type="number"
-                                                        value={(A[j] && A[j][i]) || ''}
-                                                        onChange={(e) => alterA(j, i, e.target.value)}
-                                                        InputProps={{
-                                                            endAdornment: <InputAdornment position="end">X{i + 1}</InputAdornment>,
-                                                        }}
-                                                    />
-                                                </TableCell>
-                                                {i < varCount - 1 && (
-                                                    <TableCell align="center">
-                                                        <FaPlus />
-                                                    </TableCell>
-                                                )}
-                                            </>
-                                        ))}
-                                    <TableCell align="center">
-                                        <Select defaultValue="-1">
-                                            <MenuItem value="-1">
-                                                <FaLessThanEqual />
-                                            </MenuItem>
-                                            <MenuItem value="0">
-                                                <FaEquals />
-                                            </MenuItem>
-                                            <MenuItem value="1">
-                                                <FaGreaterThanEqual />
-                                            </MenuItem>
-                                        </Select>
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        <TextField
-                                            value={b[j] || ''}
-                                            onChange={(e) => alterB(j, e.target.value)}
-                                            type="number"
-                                        />
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        <TableRow>
-                            <TableCell
-                                align="center"
-                                colSpan={varCount * 2}
-                            >
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={() => calculate()}
-                                    endIcon={<FaCalculator />}
-                                >
-                                    Calculate
-                                </Button>
-                            </TableCell>
-                            <TableCell
-                                align="center"
-                                colSpan={1}
-                            >
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    size="small"
-                                    onClick={() => example()}
-                                    endIcon={<FaPlayCircle />}
-                                >
-                                    Example
-                                </Button>
-                            </TableCell>
-                        </TableRow>
+                        <SubjectEquations
+                            consCount={consCount}
+                            varCount={varCount}
+                            A={A}
+                            alterA={alterA}
+                            b={b}
+                            alterB={alterB}
+                        />
+                        <ActionButtons
+                            varCount={varCount}
+                            calculate={calculate}
+                            example={example}
+                        />
                     </TableBody>
                 </Table>
             </TableContainer>
