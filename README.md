@@ -10,6 +10,7 @@ You can press Example button to fill out corresponding parameters for WYNDOR GLA
 
 I fully implemented the all logic, however I could not find necessary time to add more details to the Solution sections. It displays the necessary information about the steps, but I wanted to fully visualize all steps during the calculation period.
 
+# [Live Demo](https://doguhanciftci.github.io/simplex/)
 
 # Technical Details About the Project
 
