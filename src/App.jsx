@@ -249,8 +249,6 @@ function App() {
                 ]);
             }
         }
-
-        console.log('doguhan');
     };
 
     const example = () => {
